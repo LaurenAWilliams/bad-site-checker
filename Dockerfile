@@ -17,4 +17,4 @@ COPY . /app
 
 ENTRYPOINT ["python"]
 
-CMD ["app.py"]
+CMD ["url_lookup_service/app.py"]

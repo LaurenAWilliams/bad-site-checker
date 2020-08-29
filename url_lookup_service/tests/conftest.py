@@ -1,6 +1,6 @@
 import pytest
 
-from app import app as flask_app
+from url_lookup_service.app import app as flask_app
 
 
 @pytest.fixture
