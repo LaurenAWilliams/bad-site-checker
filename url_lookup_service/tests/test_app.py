@@ -8,10 +8,15 @@ def test_root(client):
     expected_response = {"text": "Hello World!"}
     assert expected_response == json.loads(response.get_data())
 
+@mock.patch('url_lookup_service.app.is_url_valid')
+@mock.patch('url_lookup_service.app.is_url_reachable')
 @mock.patch('url_lookup_service.app.post_url_scan')
 @mock.patch('url_lookup_service.app.get_url_scan_report')
-def test_url_lookup(mock_get_url_scan_report, mock_post_url_scan, client):
+def test_url_lookup(mock_get_url_scan_report, mock_post_url_scan,
+                    mock_is_url_reachable, mock_is_url_valid, client):
 
+    mock_is_url_valid.return_value = True
+    mock_is_url_reachable.return_value = True
     mock_post_url_scan.return_value = 20000, 200
     mock_get_url_scan_report.return_value = {
         "safe": False,
