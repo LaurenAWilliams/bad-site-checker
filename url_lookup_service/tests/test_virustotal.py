@@ -19,6 +19,7 @@ def test_post_url_scan(mock_urlopen):
         "-1598802494", 200
     actual = post_url_scan("google.com")
     assert expected == actual
+    mm.stop()
 
 
 @patch('urllib.request.urlopen')
@@ -39,3 +40,4 @@ def test_get_url_scan_report(mock_urlopen):
                }, 200
     actual = get_url_scan_report(mock_scan_id)
     assert expected == actual
+    mm.stop()

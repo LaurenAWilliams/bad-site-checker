@@ -1,5 +1,5 @@
 import json
-from unittest.mock import patch, MagicMock
+from pytest_mock import mock
 
 
 def test_root(client):
@@ -8,14 +8,18 @@ def test_root(client):
     expected_response = {"text": "Hello World!"}
     assert expected_response == json.loads(response.get_data())
 
-@patch('url_lookup_service.utils.virustotal')
-def test_url_lookup(mock_virustotal, client):
+@mock.patch('url_lookup_service.app.post_url_scan')
+@mock.patch('url_lookup_service.app.get_url_scan_report')
+def test_url_lookup(mock_get_url_scan_report, mock_post_url_scan, client):
+
+    mock_post_url_scan.return_value = 20000, 200
+    mock_get_url_scan_report.return_value = {
+        "safe": False,
+        "details": {
+            "AutoShun": "malicious site"
+        }
+    }, 200
     response = client.get('/urlinfo/1/auctionbowling.com')
-    mm = MagicMock()
-    mm.post_url_scan.return_value = "22", 200
-    mm.get_url_scan_report.return_value = {"safe": False, "details": {
-        "AutoShun": "malicious site"}}, 200
-    mock_virustotal.return_value = mm
 
     assert response.status_code == 200
     expected_response = {
