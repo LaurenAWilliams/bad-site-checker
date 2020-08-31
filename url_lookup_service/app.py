@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, request
-from utils.virustotal import get_url_scan_report, post_url_scan
+
+from utils.vt_utils import get_url_scan_report, post_url_scan
+from utils.url_utils import is_url_reachable, is_url_valid
 
 app = Flask(__name__)
 
@@ -21,14 +23,32 @@ def url_lookup(route):
             return route
 
     url = _reconstruct_url()
-    scan_id, _ = post_url_scan(url)
-    report, status_code = get_url_scan_report(scan_id)
+
+    if not is_url_valid(url):
+        return jsonify({"reason": "url invalid"}), 400
+    if not is_url_reachable(url):
+        return jsonify({"reason": "url unreachable"}), 400
+
+    scan_id, resp_code = post_url_scan(url)
+
+    if resp_code != 200:
+        return server_error(resp_code)
+
+    report, resp_code = get_url_scan_report(scan_id)
+
+    if resp_code != 200:
+        return server_error(resp_code)
 
     return jsonify({
         "lookup_url": url,
         "safe": report['safe'],
         "details": report['details'],
     })
+
+def server_error(resp_code):
+    return jsonify({"reason": "server error, got %s from internal apis"
+                              % resp_code
+                    }), 500
 
 
 if __name__ == '__main__':

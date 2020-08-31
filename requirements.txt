@@ -4,3 +4,4 @@ pytest-flask
 pytest-mock
 python-dotenv
 pycodestyle
+validators

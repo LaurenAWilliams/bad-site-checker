@@ -1,29 +1,26 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
 ### What is this repository for? ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+This is a POC demonstrating a small web service that checks whether URLs are
+malicious or not, responding accordingly.
+
+This is built in python using the Flask framework, and is therefore relatively
+lightweight and straight forward.
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+#### Run Docker Container ####
 
-### Contribution guidelines ###
+1) Make a ```.env``` file at the project root, and add your Virus Total API
+key to the environment variable ```VT_API_KEY```.
+2) ```docker build -t url-lookup-service .```
+3) ```docker run -p5000:5000 url-lookup-service```
+4) Server should be running on ```127.0.0.1```
 
-* Writing tests
-* Code review
-* Other guidelines
+#### Testing ####
+```python -m pytest```
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+Lauren Williams [<laurenwilliamssoftwareengineer@gmail.com>](mailto:laurenwilliamssoftwareengineer@gmail.com)

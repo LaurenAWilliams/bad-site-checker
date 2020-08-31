@@ -8,6 +8,7 @@ import os
 import json
 from dotenv import load_dotenv
 from urllib import request, parse
+import time
 
 load_dotenv()
 
@@ -51,6 +52,13 @@ def get_url_scan_report(scan_id):
     if resp.getcode() == 200:
         data = resp.read()
         decoded_data = json.loads(data)
+        print(decoded_data)
+        for _ in range(0, 5):
+            if 'positives' in decoded_data:
+                break
+            time.sleep(1)
+        else:
+            return None, resp.getcode()
         if decoded_data['positives'] != 0:
             safe = False
             scans = decoded_data['scans']
