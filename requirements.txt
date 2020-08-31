@@ -5,3 +5,4 @@ pytest-mock
 python-dotenv
 pycodestyle
 validators
+mysql-connector-python

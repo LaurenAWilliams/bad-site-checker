@@ -52,7 +52,6 @@ def get_url_scan_report(scan_id):
     if resp.getcode() == 200:
         data = resp.read()
         decoded_data = json.loads(data)
-        print(decoded_data)
         for _ in range(0, 5):
             if 'positives' in decoded_data:
                 break

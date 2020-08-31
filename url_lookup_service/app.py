@@ -1,9 +1,23 @@
 from flask import Flask, jsonify, request
 
+import mysql.connector
+import json
+import os
+from dotenv import load_dotenv
 from utils.vt_utils import get_url_scan_report, post_url_scan
 from utils.url_utils import is_url_reachable, is_url_valid
 
+load_dotenv()
 app = Flask(__name__)
+
+insert_query = """
+INSERT INTO lookup (url, safe, details)
+VALUES ('%s', %s, '%s')
+"""
+
+get_url_query = """
+SELECT * FROM lookup WHERE url="%s"
+"""
 
 
 @app.route('/', methods=['GET'])
@@ -13,6 +27,17 @@ def root():
 
 @app.route('/urlinfo/1/<path:route>', methods=['GET'])
 def url_lookup(route):
+
+    config = {
+        'user': os.getenv("DB_USER"),
+        'password': os.getenv("DB_PASS"),
+        'host': 'db',
+        'port': '3306',
+        'database': 'urllookupservice'
+    }
+
+    connection = mysql.connector.connect(**config)
+    cursor = connection.cursor(dictionary=True)
 
     def _reconstruct_url():
         """Add proper query back in since flask strips it"""
@@ -29,6 +54,19 @@ def url_lookup(route):
     if not is_url_reachable(url):
         return jsonify({"reason": "url unreachable"}), 400
 
+    cursor.execute(get_url_query % url)
+
+    data = cursor.fetchone()
+
+    app.logger.info("Retrieved data: %s" % data)
+
+    if data is not None:
+        return jsonify({
+            "lookup_url": data['url'],
+            "safe": True if data['safe'] == 1 else False,
+            "details": data['details']
+        })
+
     scan_id, resp_code = post_url_scan(url)
 
     if resp_code != 200:
@@ -39,11 +77,20 @@ def url_lookup(route):
     if resp_code != 200:
         return server_error(resp_code)
 
+    app.logger.info("Report dump: %s" % str(report))
+
+    cursor.execute(insert_query % (url, "TRUE" if report['safe'] else "FALSE", json.dumps(report['details'])))
+
+    connection.commit()
+
+    cursor.close()
+
     return jsonify({
         "lookup_url": url,
         "safe": report['safe'],
         "details": report['details'],
     })
+
 
 def server_error(resp_code):
     return jsonify({"reason": "server error, got %s from internal apis"
