@@ -12,11 +12,12 @@ lightweight and straight forward.
 
 #### Run Docker Container ####
 
-1) Make a ```.env``` file at the project root, and add your Virus Total API
-key to the environment variable ```VT_API_KEY```.
-2) ```docker build -t url-lookup-service .```
-3) ```docker run -p5000:5000 url-lookup-service```
-4) Server should be running on ```127.0.0.1```
+1) Make a ```.env``` file at the project root, and add the follow environment variables:
+ ```VT_API_KEY```, ```MYSQL_ROOT_PASSWORD```, ```DB_USER```, ```DB_PASS```
+
+2) ```docker-compose up --build```
+
+3) Server should be running on ```127.0.0.1:5000```
 
 #### Testing ####
 ```python -m pytest```

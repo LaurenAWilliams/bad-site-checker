@@ -44,8 +44,7 @@ def get_url_scan_report(scan_id):
     :param scan_id: scan id of previous scan we submitted
     :return: dict, status_code: success or failure response, with reasoning
     """
-    url = "https://www.virustotal.com/vtapi/v2/url/report" \
-          "?apikey=%s&resource=%s"
+    url = "https://www.virustotal.com/vtapi/v2/url/report?apikey=%s&resource=%s"
     query_url = url % (VT_API_KEY, scan_id)
     resp = request.urlopen(query_url)
     failed_scans = dict()
