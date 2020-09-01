@@ -4,11 +4,12 @@ This is currently implemented using the free tier, so we're limited
 to 4 lookups per minute.
 """
 
-import os
 import json
-from dotenv import load_dotenv
-from urllib import request, parse
+import os
 import time
+from urllib import request, parse
+
+from dotenv import load_dotenv
 
 load_dotenv()
 

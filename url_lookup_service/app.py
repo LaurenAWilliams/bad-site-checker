@@ -1,23 +1,10 @@
 from flask import Flask, jsonify, request
 
-import mysql.connector
-import json
-import os
-from dotenv import load_dotenv
-from utils.vt_utils import get_url_scan_report, post_url_scan
+from database import Database
 from utils.url_utils import is_url_reachable, is_url_valid
+from utils.vt_utils import get_url_scan_report, post_url_scan
 
-load_dotenv()
 app = Flask(__name__)
-
-insert_query = """
-INSERT INTO lookup (url, safe, details)
-VALUES ('%s', %s, '%s')
-"""
-
-get_url_query = """
-SELECT * FROM lookup WHERE url="%s"
-"""
 
 
 @app.route('/', methods=['GET'])
@@ -27,18 +14,6 @@ def root():
 
 @app.route('/urlinfo/1/<path:route>', methods=['GET'])
 def url_lookup(route):
-
-    config = {
-        'user': os.getenv("DB_USER"),
-        'password': os.getenv("DB_PASS"),
-        'host': 'db',
-        'port': '3306',
-        'database': 'urllookupservice'
-    }
-
-    connection = mysql.connector.connect(**config)
-    cursor = connection.cursor(dictionary=True)
-
     def _reconstruct_url():
         """Add proper query back in since flask strips it"""
         if request.query_string:
@@ -47,6 +22,8 @@ def url_lookup(route):
         else:
             return route
 
+    database = Database()
+
     url = _reconstruct_url()
 
     if not is_url_valid(url):
@@ -54,9 +31,7 @@ def url_lookup(route):
     if not is_url_reachable(url):
         return jsonify({"reason": "url unreachable"}), 400
 
-    cursor.execute(get_url_query % url)
-
-    data = cursor.fetchone()
+    data = database.fetch_by_url(url)
 
     app.logger.info("Retrieved data: %s" % data)
 
@@ -79,11 +54,7 @@ def url_lookup(route):
 
     app.logger.info("Report dump: %s" % str(report))
 
-    cursor.execute(insert_query % (url, "TRUE" if report['safe'] else "FALSE", json.dumps(report['details'])))
-
-    connection.commit()
-
-    cursor.close()
+    database.push_data_from_report(url, report)
 
     return jsonify({
         "lookup_url": url,
