@@ -2,6 +2,7 @@ Flask
 pytest
 pytest-flask
 pytest-mock
+pytest-cov
 python-dotenv
 pycodestyle
 validators
