@@ -2,6 +2,7 @@
 Basic Flask application that utilises VirusTotal's API to lookup urls to check if they are safe or not.
 It then stores the result of this lookup in a MySQL DB.
 """
+import json
 
 from flask import Flask, jsonify, request
 
@@ -24,6 +25,7 @@ def url_lookup(route):
     :param route: path given after 1 includes queries (but stripping ?)
     :return:
     """
+
     def _reconstruct_url():
         """Add proper query back in since flask strips it"""
         if request.query_string:
@@ -51,7 +53,7 @@ def url_lookup(route):
         return jsonify({
             "lookup_url": data['url'],
             "safe": True if data['safe'] == 1 else False,
-            "details": data['details']
+            "details": json.loads(data['details'])
         })
 
     # send url off to VT to be scanned

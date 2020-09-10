@@ -46,7 +46,7 @@ def test_url_lookup_no_existing_data(mock_get_url_scan_report, mock_post_url_sca
 @mock.patch('url_lookup_service.app.is_url_valid')
 @mock.patch('url_lookup_service.app.is_url_reachable')
 def test_url_lookup_existing_data(mock_is_url_reachable, mock_is_url_valid, mock_db, client):
-    data = {"safe": False, "details": {"AutoShun": "malicious site"}, "url": "auctionbowling.com"}
+    data = {"safe": False, "details": '{"AutoShun": "malicious site"}', "url": "auctionbowling.com"}
     mock_db_class = mock_db.return_value
     mock_db_class.fetch_by_url.return_value = data
     mock_is_url_valid.return_value = True
