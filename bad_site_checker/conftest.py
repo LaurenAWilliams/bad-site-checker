@@ -1,6 +1,6 @@
 import pytest
 
-from url_lookup_service.app import app as flask_app
+from bad_site_checker.app import app as flask_app
 
 
 @pytest.fixture

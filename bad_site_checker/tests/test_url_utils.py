@@ -1,7 +1,7 @@
 import urllib.error
 from unittest.mock import patch, MagicMock
 
-from url_lookup_service.utils.url_utils import is_url_valid, is_url_reachable
+from bad_site_checker.utils.url_utils import is_url_valid, is_url_reachable
 
 
 def test_bad_url_valid():

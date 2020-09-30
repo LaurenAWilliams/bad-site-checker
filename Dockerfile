@@ -12,4 +12,4 @@ COPY . /app
 
 ENTRYPOINT ["python"]
 
-CMD ["url_lookup_service/app.py"]
+CMD ["bad_site_checker/app.py"]

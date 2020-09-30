@@ -1,5 +1,5 @@
-from url_lookup_service.utils.vt_utils import post_url_scan
-from url_lookup_service.utils.vt_utils import get_url_scan_report
+from bad_site_checker.utils.vt_utils import post_url_scan
+from bad_site_checker.utils.vt_utils import get_url_scan_report
 from unittest.mock import patch, MagicMock
 
 

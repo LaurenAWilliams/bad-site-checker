@@ -10,11 +10,11 @@ def test_root(client):
     assert expected_response == json.loads(response.get_data())
 
 
-@mock.patch('url_lookup_service.app.Database')
-@mock.patch('url_lookup_service.app.is_url_valid')
-@mock.patch('url_lookup_service.app.is_url_reachable')
-@mock.patch('url_lookup_service.app.post_url_scan')
-@mock.patch('url_lookup_service.app.get_url_scan_report')
+@mock.patch('bad_site_checker.app.Database')
+@mock.patch('bad_site_checker.app.is_url_valid')
+@mock.patch('bad_site_checker.app.is_url_reachable')
+@mock.patch('bad_site_checker.app.post_url_scan')
+@mock.patch('bad_site_checker.app.get_url_scan_report')
 def test_url_lookup_no_existing_data(mock_get_url_scan_report, mock_post_url_scan,
                                      mock_is_url_reachable, mock_is_url_valid, mock_db,
                                      client):
@@ -42,9 +42,9 @@ def test_url_lookup_no_existing_data(mock_get_url_scan_report, mock_post_url_sca
     assert expected_response == json.loads(response.get_data())
 
 
-@mock.patch('url_lookup_service.app.Database')
-@mock.patch('url_lookup_service.app.is_url_valid')
-@mock.patch('url_lookup_service.app.is_url_reachable')
+@mock.patch('bad_site_checker.app.Database')
+@mock.patch('bad_site_checker.app.is_url_valid')
+@mock.patch('bad_site_checker.app.is_url_reachable')
 def test_url_lookup_existing_data(mock_is_url_reachable, mock_is_url_valid, mock_db, client):
     data = {"safe": False, "details": '{"AutoShun": "malicious site"}', "url": "auctionbowling.com"}
     mock_db_class = mock_db.return_value
@@ -65,10 +65,10 @@ def test_url_lookup_existing_data(mock_is_url_reachable, mock_is_url_valid, mock
     assert expected_response == json.loads(response.get_data())
 
 
-@mock.patch('url_lookup_service.app.Database')
-@mock.patch('url_lookup_service.app.is_url_valid')
-@mock.patch('url_lookup_service.app.is_url_reachable')
-@mock.patch('url_lookup_service.app.post_url_scan')
+@mock.patch('bad_site_checker.app.Database')
+@mock.patch('bad_site_checker.app.is_url_valid')
+@mock.patch('bad_site_checker.app.is_url_reachable')
+@mock.patch('bad_site_checker.app.post_url_scan')
 def test_url_lookup_204_from_vt(mock_post_url_scan, mock_is_url_reachable, mock_is_url_valid, mock_db, client):
     mock_db_class = mock_db.return_value
     mock_db_class.fetch_by_url.return_value = None

@@ -29,7 +29,7 @@ class Database:
             "password": os.getenv("DB_PASS"),
             "host": 'db',
             "port": '3306',
-            "database": 'urllookupservice'
+            "database": 'badsitechecker'
         }
         self.connection = mysql.connector.connect(**config)
         self.cursor = self.connection.cursor(dictionary=True)

@@ -1,5 +1,5 @@
-CREATE DATABASE urllookupservice;
-use urllookupservice;
+CREATE DATABASE badsitechecker;
+use badsitechecker;
 
 CREATE TABLE lookup (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,

@@ -2,7 +2,7 @@
 
 ### What is this repository for? ###
 
-This is a POC demonstrating a small web service that checks whether URLs are
+This is a POC demonstrating a small web service that checks whether websites are
 malicious or not, responding accordingly.
 
 This is built in python using the Flask framework, and is therefore relatively

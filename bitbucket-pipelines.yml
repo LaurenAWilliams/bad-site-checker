@@ -9,5 +9,5 @@ pipelines:
           - pip
         script:
           - pip install -r requirements.txt
-          - python -m pytest --cov=url_lookup_service .
-          - pycodestyle --max-line-length=119 url_lookup_service
+          - python -m pytest --cov=bad_site_checker .
+          - pycodestyle --max-line-length=119 bad_site_checker
