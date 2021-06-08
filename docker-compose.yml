@@ -10,7 +10,7 @@ services:
   db:
     env_file:
       - .env
-    image: mysql:5.7
+    image: mysql/mysql-server:8.0.23
     ports:
       - "32000:3306"
     environment:

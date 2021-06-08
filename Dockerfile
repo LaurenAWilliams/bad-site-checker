@@ -1,6 +1,4 @@
-FROM python:3.7.7
-
-MAINTAINER Lauren Williams "laurenwilliamssoftwareeengineer@gmail.com"
+FROM python:3.9.5
 
 COPY ./requirements.txt /app/requirements.txt
 
